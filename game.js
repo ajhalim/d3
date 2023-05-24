@@ -25,6 +25,7 @@ class final extends Phaser.Scene{
         super('final');
     }
     create(){
+        let circle = this.add.image(1920 *.55, 1080 *.5, 'player').setScale(2)
         this.add.text(1920 *.5, 1080 *.5,"Game over, you did it");
     }
 }
@@ -177,7 +178,7 @@ class tween1 extends Phaser.Scene {
     }
 
     create(){
-        this.add.thing(1920 *.5, 1080 *.5,"player")
+        let circle = this.add.image(1920 *.51, 1080 *.5, 'player').setScale(1.5)
         this.add.text(1920 *.5, 1080 *.5,"lvl2");
         this.add.text(1920 *.47, 1080 *.6,"click to continue");
         this.input.on('pointerdown', () => this.scene.start('lvl2'));
@@ -191,7 +192,8 @@ class tween2 extends Phaser.Scene {
     }
 
     create(){
-        this.add.thing(1920 *.5, 1080 *.5,"player")
+        let circle = this.add.image(1920 *.51, 1080 *.5, 'player').setScale(1.5)
+        //this.add.thing(1920 *.5, 1080 *.5,"player")
         this.add.text(1920 *.5, 1080 *.5,"lvl3");
         this.add.text(1920 *.47, 1080 *.6,"click to continue");
         this.input.on('pointerdown', () => this.scene.start('lvl3'));
