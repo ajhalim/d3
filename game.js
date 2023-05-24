@@ -20,47 +20,147 @@ class logo extends Phaser.Scene {
 }
 */
 
+class lvl3 extends Phaser.Scene{
+    constructor(){
+        super('lvl3');
+    }
+    player;
+    cursors;
+    platforms;
+    goal;
+    create(){
+        this.platforms = this.physics.add.staticGroup();
+        this.goal = this.physics.add.staticGroup();
+
+        this.platforms.create(1920*.5, 1080 *1.05, 'plat').setScale(2).refreshBody()
+    }
+}
+
+class lvl2 extends Phaser.Scene{
+    constructor(){
+        super('lvl2');
+    }
+    player;
+    cursors;
+    platforms;
+    goal;
+    create(){
+        //this.add.text(1920 *.5, 1080 *.5,"lvl2");
+        //this.input.on('pointerdown', () => this.scene.start('lvl2'));
+
+        this.platforms = this.physics.add.staticGroup();
+        this.goal = this.physics.add.staticGroup();
+
+        //platforms
+        this.platforms.create(1920*.5, 1080 *1.05, 'plat').setScale(2).refreshBody()
+
+        this.platforms.create(1920 * .9, 1080*.25, 'plat').setScale(0.5).refreshBody()
+
+        this.platforms.create(1920 * .1, 1080*.35, 'plat').setScale(0.5).refreshBody()
+
+        this.platforms.create(1920 * .5, 1080*.65, 'plat').setScale(0.5).refreshBody()
+
+        //Goal
+        this.goal.create(1920*.1, 1080*.25,'goal').refreshBody()
+
+        //player
+        this.player = this.physics.add.sprite(1920, 0, 'player');
+        this.player.setBounce(0.2);
+        this.player.setCollideWorldBounds(true);
+
+
+        //physics stuff
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.overlap(this.player, this.goal, this.next2, null, this);
+
+        this.cursors = this.input.keyboard.createCursorKeys();
+    }
+
+    next2(player,goal){
+        this.scene.start('tween2');
+    }
+    
+    update(){
+        const { left, right, up } = this.cursors;
+
+        if (left.isDown)
+        {
+            this.player.setVelocityX(-320);
+
+            //this.player.anims.play('left', true);
+        }
+        else if (right.isDown)
+        {
+            this.player.setVelocityX(320);
+
+            //this.player.anims.play('right', true);
+        }
+
+        if (up.isDown && this.player.body.touching.down)
+        {
+            this.player.setVelocityY(-500);
+        }
+    }
+}
+class tween1 extends Phaser.Scene {
+    
+    constructor(){
+        super('tween1');
+    }
+
+    create(){
+        this.add.text(1920 *.5, 1080 *.5,"lvl2");
+        this.input.on('pointerdown', () => this.scene.start('lvl2'));
+    }
+}
+
+class tween2 extends Phaser.Scene {
+    
+    constructor(){
+        super('tween2');
+    }
+
+    create(){
+        this.add.text(1920 *.5, 1080 *.5,"lvl3");
+        this.input.on('pointerdown', () => this.scene.start('lvl3'));
+    }
+}
+
 class lvl1 extends Phaser.Scene {
-    keySpace;
+    //keySpace;
+    player;
+    cursors;
+    platforms;
+    goal;
     constructor(){
         super('lvl1');
-        this.rope;
+        //this.rope;
     }
     create(){
         //var spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //physics
-        this.matter.world.setBounds();
+        //this.matter.world.setBounds();
         //Player
-        let player = this.matter.add.circle(1920/2,1080/2,50,0xFF0000);
+        //let player = this.add.circle(1920/2,1080/2,50,0xFF0000);
+        
         //player.setCollisionCategory(playerThing);
         //player.setOnCollideWith(ceil, )
 
-        
+        this.platforms = this.physics.add.staticGroup();
+        this.goal = this.physics.add.staticGroup();
         //Ceiling
-        let ceil = this.matter.add.rectangle(1920/2,0,1920,1080*.15, { isStatic: true }, 0x808080);
+        this.platforms.create(1920* .5, 1080 * 0, 'plat').setScale(2).refreshBody()
+
+        this.goal.create(1920*.85, 1080*.9,'goal').refreshBody()
 
         //floor 
-        let floor = this.matter.add.rectangle(1920* .35, 1080, 1500,128, { isStatic: true }, 0x808080);
+        this.platforms.create(1920* .25, 1080 , 'plat').setScale(1.75).refreshBody()
 
-        //rope
-        this.rope = this.matter.add.spring(player, ceil, 1080/6, 0.001);
-        //this.input.keyboard.on('SPACE', callback, context);
-
-        this.matter.add.mouseSpring();
-
-        //please work
-        this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
-        //console.log("test");
-
-        this.input.keyboard.on('keyup-SPACE', event =>
-        {
-
-            console.log('test');
-            rope.destroy();
-            //rope = false;
-
-        });
+        //player
+        this.player = this.physics.add.sprite(100, 450, 'player');
+        this.player.setBounce(0.2);
+        this.player.setCollideWorldBounds(true);
+        
 
         //this.input.once('keydown-A', () =>
         //{
@@ -69,12 +169,38 @@ class lvl1 extends Phaser.Scene {
 
         //});
 
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.overlap(this.player, this.goal, this.next1, null, this);
+
+        this.cursors = this.input.keyboard.createCursorKeys();
+
+    }
+
+    next1(player,goal){
+        this.scene.start('tween1');
     }
     update(){
-        if (this.keySpace.isDown)
+        const { left, right, up } = this.cursors;
+
+        if (left.isDown)
         {
-           this.rope = false;
+            this.player.setVelocityX(-320);
+
+            //this.player.anims.play('left', true);
         }
+        else if (right.isDown)
+        {
+            this.player.setVelocityX(320);
+
+            //this.player.anims.play('right', true);
+        }
+
+        if (up.isDown && this.player.body.touching.down)
+        {
+            this.player.setVelocityY(-500);
+        }
+
+        
     }
 }
 
@@ -86,6 +212,10 @@ class intro extends Phaser.Scene {
     preload(){
         //let width = this.game.config.width;
         //let height = this.game.config.height;
+        this.load.path = './assets/';
+        this.load.image('plat', 'platform.png');
+        this.load.image('player', 'player.png');
+        this.load.image('goal', 'goal.png');
     }
     create(){
         this.add.text(this.game.config.width/2, this.game.config.height/2, "Click to continue");
@@ -102,78 +232,13 @@ const game = new Phaser.Game({
         //backgroundColor: '#FFFFFF'
     },
     physics: {
-        default: 'matter',
-        matter: {
-            enableSleeping: true,
-            debug: {
-
-                showAxes: false,
-                showAngleIndicator: true,
-                angleColor: 0xe81153,
-
-                showBroadphase: false,
-                broadphaseColor: 0xffb400,
-
-                showBounds: false,
-                boundsColor: 0xffffff,
-
-                showVelocity: true,
-                velocityColor: 0x00aeef,
-
-                showCollisions: true,
-                collisionColor: 0xf5950c,
-    
-                showSeparations: false,
-                separationColor: 0xffa500,
-
-                showBody: true,
-                showStaticBody: true,
-                showInternalEdges: true,
-
-                renderFill: false,
-                renderLine: true,
-    
-                fillColor: 0x106909,
-                fillOpacity: 1,
-                lineColor: 0x28de19,
-                lineOpacity: 1,
-                lineThickness: 1,
-    
-                staticFillColor: 0x0d177b,
-                staticLineColor: 0x1327e4,
-
-                showSleeping: true,
-                staticBodySleepOpacity: 1,
-                sleepFillColor: 0x464646,
-                sleepLineColor: 0x999a99,
-    
-                showSensors: true,
-                sensorFillColor: 0x0d177b,
-                sensorLineColor: 0x1327e4,
-    
-                showPositions: true,
-                positionSize: 4,
-                positionColor: 0xe042da,
-    
-                showJoint: true,
-                jointColor: 0xe0e042,
-                jointLineOpacity: 1,
-                jointLineThickness: 2,
-    
-                pinSize: 4,
-                pinColor: 0x42e0e0,
-    
-                springColor: 0xe042e0,
-    
-                anchorColor: 0xefefef,
-                anchorSize: 4,
-    
-                showConvexHulls: true,
-                hullColor: 0xd703d0
-            }
+        default: 'arcade',
+        arcade: {
+            debug: false,
+            gravity: { y: 300 }
         }
     },
-    scene: [intro,lvl1],
+    scene: [intro,lvl1, tween1, lvl2, tween2, lvl3],
     title: "D1",
 });
 
