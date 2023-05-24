@@ -20,10 +20,20 @@ class logo extends Phaser.Scene {
 }
 */
 
+class final extends Phaser.Scene{
+    constructor(){
+        super('final');
+    }
+    create(){
+        this.add.text(1920 *.5, 1080 *.5,"Game over, you did it");
+    }
+}
+
 class lvl3 extends Phaser.Scene{
     constructor(){
         super('lvl3');
     }
+    movingPlatform;
     player;
     cursors;
     platforms;
@@ -33,6 +43,64 @@ class lvl3 extends Phaser.Scene{
         this.goal = this.physics.add.staticGroup();
 
         this.platforms.create(1920*.5, 1080 *1.05, 'plat').setScale(2).refreshBody()
+
+
+        this.player = this.physics.add.sprite(1920, 0, 'player');
+        this.player.setBounce(0.2);
+        this.player.setCollideWorldBounds(true);
+
+
+        this.goal.create(1920*.05, 1080*.85,'goal').refreshBody()
+
+        this.movingPlatform1 = this.physics.add.image(1920*.9, 1080*.25, 'plat').setScale(0.75)
+
+        this.movingPlatform1.setImmovable(true);
+        this.movingPlatform1.body.allowGravity = false;
+        this.movingPlatform1.setVelocityX(-100);
+
+        this.movingPlatform2 = this.physics.add.image(1920*.1, 1080*.5, 'plat').setScale(0.75)
+
+        this.movingPlatform2.setImmovable(true);
+        this.movingPlatform2.body.allowGravity = false;
+        this.movingPlatform2.setVelocityX(100);
+
+        this.platforms.create(1920 * .18, 1080*.75, 'plat').setScale(.75).refreshBody()
+
+        //this.platforms.create(1920 * .1, 1080*.75, 'plat').setScale(0.5).refreshBody()
+
+
+        //physics stuff
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.overlap(this.player, this.goal, this.next3, null, this);
+        this.physics.add.collider(this.player, this.movingPlatform1);
+        this.physics.add.collider(this.player, this.movingPlatform2);
+        this.cursors = this.input.keyboard.createCursorKeys();
+    }
+
+    next3(player,goal){
+        this.scene.start('final');
+    }
+
+    update(){
+        const { left, right, up } = this.cursors;
+
+        if (left.isDown)
+        {
+            this.player.setVelocityX(-320);
+
+            //this.player.anims.play('left', true);
+        }
+        else if (right.isDown)
+        {
+            this.player.setVelocityX(320);
+
+            //this.player.anims.play('right', true);
+        }
+
+        if (up.isDown && this.player.body.touching.down)
+        {
+            this.player.setVelocityY(-500);
+        }
     }
 }
 
@@ -109,7 +177,9 @@ class tween1 extends Phaser.Scene {
     }
 
     create(){
+        this.add.thing(1920 *.5, 1080 *.5,"player")
         this.add.text(1920 *.5, 1080 *.5,"lvl2");
+        this.add.text(1920 *.47, 1080 *.6,"click to continue");
         this.input.on('pointerdown', () => this.scene.start('lvl2'));
     }
 }
@@ -121,7 +191,9 @@ class tween2 extends Phaser.Scene {
     }
 
     create(){
+        this.add.thing(1920 *.5, 1080 *.5,"player")
         this.add.text(1920 *.5, 1080 *.5,"lvl3");
+        this.add.text(1920 *.47, 1080 *.6,"click to continue");
         this.input.on('pointerdown', () => this.scene.start('lvl3'));
     }
 }
@@ -238,7 +310,7 @@ const game = new Phaser.Game({
             gravity: { y: 300 }
         }
     },
-    scene: [intro,lvl1, tween1, lvl2, tween2, lvl3],
+    scene: [intro,lvl1, tween1, lvl2, tween2, lvl3, final],
     title: "D1",
 });
 
