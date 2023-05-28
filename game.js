@@ -69,6 +69,36 @@ class lvl3 extends Phaser.Scene{
 
         //this.platforms.create(1920 * .1, 1080*.75, 'plat').setScale(0.5).refreshBody()
 
+        // Make mobile buttons
+        this.arrowLeft = this.add.sprite(115, 540, 'arrowKey');
+        this.arrowLeft.setInteractive().setScale(0.7);
+
+        this.arrowRight = this.add.sprite(300, 540, 'arrowKey');
+        this.arrowRight.setScale(-0.7, 0.7);
+        this.arrowRight.setInteractive();
+
+        this.arrowUp = this.add.sprite(1800, 540, 'arrowKey');
+        this.arrowUp.setScale(0.7);
+        this.arrowUp.setRotation(Phaser.Math.DegToRad(90));
+        this.arrowUp.setInteractive();
+
+        //Event based input
+        this.arrowLeft.on('pointerdown', () => {
+            console.log("we in left");
+            this.player.setVelocityX(-320);
+        });
+
+        this.arrowRight.on('pointerdown', () => {
+            console.log("we in right");
+            this.player.setVelocityX(320);
+        });
+
+        this.arrowUp.on('pointerdown', () => {
+            if(this.player.body.touching.down) {
+                console.log("we in up");
+                this.player.setVelocityY(-500);
+            }
+        });
 
         //physics stuff
         this.physics.add.collider(this.player, this.platforms);
@@ -136,6 +166,37 @@ class lvl2 extends Phaser.Scene{
         this.player = this.physics.add.sprite(1920, 0, 'player');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
+
+        // Make mobile buttons
+        this.arrowLeft = this.add.sprite(115, 540, 'arrowKey');
+        this.arrowLeft.setInteractive().setScale(0.7);
+
+        this.arrowRight = this.add.sprite(300, 540, 'arrowKey');
+        this.arrowRight.setScale(-0.7, 0.7);
+        this.arrowRight.setInteractive();
+
+        this.arrowUp = this.add.sprite(1800, 540, 'arrowKey');
+        this.arrowUp.setScale(0.7);
+        this.arrowUp.setRotation(Phaser.Math.DegToRad(90));
+        this.arrowUp.setInteractive();
+
+        //Event based input
+        this.arrowLeft.on('pointerdown', () => {
+            console.log("we in left");
+            this.player.setVelocityX(-320);
+        });
+
+        this.arrowRight.on('pointerdown', () => {
+            console.log("we in right");
+            this.player.setVelocityX(320);
+        });
+
+        this.arrowUp.on('pointerdown', () => {
+            if(this.player.body.touching.down) {
+                console.log("we in up");
+                this.player.setVelocityY(-500);
+            }
+        });
 
 
         //physics stuff
