@@ -234,7 +234,37 @@ class lvl1 extends Phaser.Scene {
         this.player = this.physics.add.sprite(100, 450, 'player');
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
-        
+
+        // Make mobile buttons
+        this.arrowLeft = this.add.sprite(115, 540, 'arrowKey');
+        this.arrowLeft.setInteractive().setScale(0.7);
+
+        this.arrowRight = this.add.sprite(300, 540, 'arrowKey');
+        this.arrowRight.setScale(-0.7, 0.7);
+        this.arrowRight.setInteractive();
+
+        this.arrowUp = this.add.sprite(1800, 540, 'arrowKey');
+        this.arrowUp.setScale(0.7);
+        this.arrowUp.setRotation(Phaser.Math.DegToRad(90));
+        this.arrowUp.setInteractive();
+
+        //Event based input
+        this.arrowLeft.on('pointerdown', () => {
+            console.log("we in left");
+            this.player.setVelocityX(-320);
+        });
+
+        this.arrowRight.on('pointerdown', () => {
+            console.log("we in right");
+            this.player.setVelocityX(320);
+        });
+
+        this.arrowUp.on('pointerdown', () => {
+            if(this.player.body.touching.down) {
+                console.log("we in up");
+                this.player.setVelocityY(-500);
+            }
+        });
 
         //this.input.once('keydown-A', () =>
         //{
@@ -255,7 +285,7 @@ class lvl1 extends Phaser.Scene {
     }
     update(){
         const { left, right, up } = this.cursors;
-
+        //console.log(this.arrowRight.input.pointer1.isDown);
         if (left.isDown)
         {
             this.player.setVelocityX(-320);
@@ -290,6 +320,7 @@ class intro extends Phaser.Scene {
         this.load.image('plat', 'platform.png');
         this.load.image('player', 'player.png');
         this.load.image('goal', 'goal.png');
+        this.load.image('arrowKey', 'arrow key.png');
     }
     create(){
         this.add.text(this.game.config.width/2, this.game.config.height/2, "Click to continue");
